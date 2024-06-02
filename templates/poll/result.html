@@ -6,12 +6,55 @@
 <h1>{{ question.question_text }}</h1>
 <ul>
     {% for c in question.choice_set.all %}
-    <li> {{ c.choice_text }} - {{ c.votes }} voto{{ c.votes | pluralize }}</li>
-
+    <li>{{ c.choice_text }} - {{ c.votes }} voto{{ c.votes|pluralize }}</li>
     {% endfor %}
-
-
 </ul>
+
+<div>
+    <canvas id="combinedChart"></canvas>
+</div>
+
+<!--Este es el Script-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const labels = [
+            {% for c in question.choice_set.all %}
+                "{{ c.choice_text }}",
+            {% endfor %}
+        ];
+        
+        const data = [
+            {% for c in question.choice_set.all %}
+                {{ c.votes }},
+            {% endfor %}
+        ];
+//--------------------------------------------------------------------------//
+
+        const ctx = document.getElementById('combinedChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Número de Votos',
+                    data: data,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+
 <hr>
 <a href="{% url 'poll:home' %}">Encuestas</a>
 {% endblock %}

@@ -5,7 +5,8 @@
 <h1>{% block title%}Encuesta{% endblock %}</h1>
 <ul>
 {% for q in questions %}
-<li><a href="{% url 'poll:vote' q.id %}">{{ q }}</a></li>
+<li><a href="{% url 'poll:vote' q.id %}">{{ q }}</a>
+- <a href= "{% url 'poll:result' q.id %}">Resultado</a>
 {% endfor %}
 </ul>
 {% endblock %}
